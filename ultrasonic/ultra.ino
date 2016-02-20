@@ -8,7 +8,7 @@ const int greenLED = D4;
 
 // the LED that we are currently flashing
 int flashLED = redLED;
-int delay_time=60;
+int delay_time=50;
 
 // t-nought of our execution timer
 unsigned long t0;
@@ -30,8 +30,8 @@ double  distance = 0.0,
 
 void setup() {
   t0 = millis();
-  Particle.variable("distance", distance);
-  Particle.variable("volume", volume);
+//  Particle.variable("distance", distance);
+//  Particle.variable("volume", volume);
 
   pinMode(redLED, OUTPUT);
   pinMode(yellowLED, OUTPUT);
@@ -56,22 +56,22 @@ void loop() {
   delay(delay_time);
 
   //This is our execution timer. We get a new reading every
-  if( millis() - t0 > execution_delay) {
+//  if( millis() - t0 > execution_delay) {
     distance = read_distance(sensor);
-    volume = (distance*slope)+intercept;
-    if( volume < 1000) {
+    //volume = (distance*slope)+intercept;
+    if( distance > 5.5) {
       flashLED = greenLED;
     }
-    else if( volume < 1500) {
+    else if( distance < 4.95) {
       flashLED = yellowLED;
     }
     else {
       flashLED = redLED;
     }
-    delay_time = 1.0/distance*1000.0;
-    /*Serial.printlnf( "%i\t%f\t%f", millis(), distance, volume );*/
-    t0=millis();
-  }
+    //delay_time = 1.0/distance*1000.0;
+    Serial.printlnf( "%i\t%f", millis(), distance );
+//    t0=millis();
+  //}
   digitalWrite(flashLED, HIGH);
   delay(delay_time);
 }
