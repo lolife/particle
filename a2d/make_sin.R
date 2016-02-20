@@ -1,0 +1,10 @@
+framerate = 44100
+n = seq(1,88200,by=1)
+yx = 127 * sin( 2.0 * pi * 440.0 * n/framerate )
+t = fft(yx)
+p = Re( t * Conj(t) )
+norm = (p-mean(p))/sd(p)
+ps = data.frame(f=n*framerate/length(t),p=norm)
+plot(ps$f,ps$p,type="l")
+which.max(ps$p)
+print(ps$f[which.max(ps$p)])
